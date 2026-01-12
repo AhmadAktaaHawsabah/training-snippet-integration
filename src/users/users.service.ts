@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserRole } from '../auth/enums/user-role.enum';
 
 @Injectable()
 export class UsersService {
@@ -95,5 +96,17 @@ export class UsersService {
     hashedPassword: string,
   ): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
+  }
+
+  async updateRole(id: number, role: UserRole): Promise<User> {
+    const user = await this.findOne(id);
+    user.role = role;
+    return this.usersRepository.save(user);
+  }
+
+  async findByRole(role: UserRole): Promise<User[]> {
+    return this.usersRepository.find({
+      where: { role },
+    });
   }
 }

@@ -5,7 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { AdminModule } from './admin/admin.module';
+import { ProductsModule } from './products/products.module';
 import { User } from './users/users.entity';
+import { Product } from './products/products.entity';
 
 @Module({
   imports: [
@@ -20,11 +23,13 @@ import { User } from './users/users.entity';
       username: process.env.DB_USERNAME || 'root',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'dev',
-      entities: [User],
+      entities: [User, Product],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
+    AdminModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

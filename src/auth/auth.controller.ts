@@ -2,7 +2,7 @@ import { Controller, Post, Body, UnauthorizedException, UseGuards } from '@nestj
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { RefreshTokenGuard } from './refresh-token.guard';
+import { RefreshTokenGuard } from '../guards/refresh-token.guard';
 import { CurrentUser } from './../decorators';
 import type { CurrentUserType } from '../common/types/current-user.type';
 

@@ -13,6 +13,8 @@ import { CurrentUserType } from '../common/types/current-user.type';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
+  private readonly systemSecret = process.env.SYSTEM_SECRET;
+
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
@@ -30,9 +32,26 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    // Get user from request
+    // Get request
     const request = context.switchToHttp().getRequest();
     let user: CurrentUserType | null = request.user;
+
+    // Check if system role is required
+    if (requiredRoles.includes(UserRole.SYSTEM)) {
+      const systemToken = request.headers['x-system-secret'];
+      
+      if (systemToken === this.systemSecret) {
+        // Attach system user to request
+        request.user = {
+          userId: 0,
+          role: UserRole.SYSTEM,
+          email: 'system@internal',
+          authenticatedAt: new Date().toISOString(),
+          tokenType: 'system',
+        };
+        return true;
+      }
+    }
 
     // Fallback: If user doesn't exist, try to verify from authorization header
     if (!user) {

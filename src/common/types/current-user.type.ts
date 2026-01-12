@@ -5,5 +5,5 @@ export interface CurrentUserType {
   email: string;
   role: UserRole;
   authenticatedAt: string;
-  tokenType: 'access' | 'refresh';
+  tokenType: 'access' | 'refresh' | 'system';
 }
