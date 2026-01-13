@@ -20,7 +20,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.usersRepository.findOne({
-      where: { email: createUserDto.email },
+      where: { email: createUserDto.email }, 
     });
 
     if (existingUser) {

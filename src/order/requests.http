@@ -1,0 +1,9 @@
+### add order for  user
+POST http://localhost:3030/orders
+Content-Type: application/json 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRleWFhd29yazU0QGdtYWlsLmNvbSIsInN1YiI6MSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NjgzMjY3ODYsImV4cCI6MTc2ODMyNzY4Nn0.pHDRAk9NCRT2Bzp30JwEP2uo17mHjn0EcAf6dF_eERg
+
+{
+  "productId": 4
+}
+
