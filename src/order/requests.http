@@ -10,13 +10,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRleWFhd
 //--------------------------------------------test for admin ---------------------------------//
 ### find all orders (admin)
 GET http://localhost:3030/orders?page=1&limit=40
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzY4Mzc4NTI3LCJleHAiOjE3NjgzNzk0Mjd9._WCyoKa8RODp4QYGJ27T7Aj9_1wSz21-fp7Xz9rwbOs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzY4Mzc5OTMxLCJleHAiOjE3NjgzODA4MzF9.m1iAzkt2nD_ScAns8NzoQb-CwLWHkRHk8Bze844HP0E
 
 
 ### approve order (admin)
 POST http://localhost:3030/orders/3/approve
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzY4Mzc3MDA2LCJleHAiOjE3NjgzNzc5MDZ9.qnLQLzBdmLRoOBsCe29luIzIuPW7Kutw57vRyF8b-xk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzY4Mzc5OTMxLCJleHAiOjE3NjgzODA4MzF9.m1iAzkt2nD_ScAns8NzoQb-CwLWHkRHk8Bze844HP0E
 
 ### reject order (admin)
-POST http://localhost:3030/orders/2/reject
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzY4Mzc3MDA2LCJleHAiOjE3NjgzNzc5MDZ9.qnLQLzBdmLRoOBsCe29luIzIuPW7Kutw57vRyF8b-xk
+POST http://localhost:3030/orders/4/reject
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInN1YiI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzY4Mzc5OTMxLCJleHAiOjE3NjgzODA4MzF9.m1iAzkt2nD_ScAns8NzoQb-CwLWHkRHk8Bze844HP0E
