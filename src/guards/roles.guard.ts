@@ -18,7 +18,7 @@ export class RolesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // Get required roles from metadata
@@ -27,8 +27,6 @@ export class RolesGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-
-  
     // If no roles are required, allow access
     if (!requiredRoles || requiredRoles.length === 0) {
       return true;
@@ -41,7 +39,7 @@ export class RolesGuard implements CanActivate {
     // Check if system role is required
     if (requiredRoles.includes(UserRole.SYSTEM)) {
       const systemToken = request.headers['x-system-secret'];
-      
+
       if (systemToken === this.systemSecret) {
         // Attach system user to request
         request.user = {
