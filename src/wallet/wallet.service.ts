@@ -41,12 +41,4 @@ export class WalletService {
         return await this.repo.save(wallet);
     }
 
-    async getWalletById(id: number) {
-        const wallet = this.repo.findOne({ where: { id } });
-        if (!wallet) {
-            throw new NotFoundException('wallet  not  found')
-        }
-        return wallet;
-    }
-
 }

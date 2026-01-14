@@ -16,9 +16,4 @@ export class WalletController {
         return await this.service.addCredits(+userId, addCreditDto);
     }
 
-    @Get(':id')
-    async getWallet(@Param('id') id: string) {
-        return this.service.getWalletById(+id);
-    }
-
 }

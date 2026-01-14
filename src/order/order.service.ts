@@ -16,9 +16,10 @@ export class OrderService {
     ) { }
 
     async createOrder(userId: number, productId: number): Promise<Order> {
-        const product = await this.productsService.findOne(productId);
-
-        const wallet = await this.walletService.findOne(userId);
+        const [product, wallet] = await Promise.all([
+            this.productsService.findOne(productId),
+            this.walletService.findOne(userId),
+        ]);
 
         if (wallet.balance < product.price) {
             throw new BadRequestException('Insufficient wallet balance');
