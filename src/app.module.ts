@@ -12,7 +12,6 @@ import { Product } from './products/products.entity';
 import { WalletModule } from './wallet/wallet.module';
 import { Wallet } from './wallet/wallet.entity';
 import { UserWalletSubscriber } from './subscribers/user-wallet.subscriber';
-import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module';
 import { OrderModule } from './order/order.module';
 import { Order } from './order/order.entity';
 
@@ -35,7 +34,6 @@ import { Order } from './order/order.entity';
     }),
     UsersModule,
     AuthModule,
-    AdminDashboardModule,
     AdminModule,
     ProductsModule,
     WalletModule,

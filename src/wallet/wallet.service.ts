@@ -21,13 +21,11 @@ export class WalletService {
   async adminAddCredits(userId: number, amount: number) {
 
     const wallet = await this.walletRepo.findOne({ where: { userId } });
-    if (!wallet) {
-      throw new NotFoundException('Wallet not found for this user');
-    }
+
+    if (!wallet) throw new NotFoundException('Wallet not found for this user');
 
     wallet.balance = (Number(wallet.balance) + amount).toFixed(2);
     return this.walletRepo.save(wallet);
   }
-
 
 }

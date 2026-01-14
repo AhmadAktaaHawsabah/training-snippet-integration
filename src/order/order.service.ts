@@ -29,7 +29,7 @@ constructor(
 
     if(!wallet) throw new NotFoundException('wallet not found');
 
-    const price = product.price;
+    const price = Number(product.price);
     const balance = Number(wallet.balance);
 
     if(balance < price) throw new BadRequestException('Insufficient wallet balance')
@@ -48,11 +48,31 @@ constructor(
     return this.orderRepo.findOne({where: {userId,productId,status}});
   }
 
-  async adminfindAll():Promise<Order[]>{
-    return this.orderRepo.find({
-      order:{ createdAt: 'DESC' }
-    });
-  }
+async adminFindPendingPaginated(page = 1, limit = 10) {
+  if (page < 1) throw new BadRequestException('page must be >= 1');
+
+  // safety for limit
+  const safeLimit = Math.min(Math.max(limit, 1), 50);
+
+  const skip = (page - 1) * safeLimit;
+
+  const [items, total] = await this.orderRepo.findAndCount({
+    where: { status: OrderStatus.PENDING },
+    order: { createdAt: 'DESC' },
+    take: safeLimit,
+    skip,
+  });
+
+  return {
+    items,
+    meta: {
+      total,
+      page,
+      limit: safeLimit,
+      totalPages: Math.ceil(total / safeLimit),
+    },
+  };
+}
 
   async adminApproveOrder(orderId: number): Promise<Order> {
     return this.dataSource.transaction(async (manager) => {
@@ -63,7 +83,6 @@ constructor(
       if (!order) throw new NotFoundException('Order not found');
 
       if (order.status !== OrderStatus.PENDING) throw new BadRequestException('Only pending orders can be approved');
-
 
       const wallet = await walletRepo.findOne({ where: { userId: order.userId } });
       if (!wallet) throw new NotFoundException('Wallet not found');
@@ -89,12 +108,10 @@ constructor(
     const order = await orderRepo.findOne({ where: { id: orderId } });
     if (!order) throw new NotFoundException('Order not found');
 
-    if (order.status !== OrderStatus.PENDING) {
-      throw new BadRequestException('Only pending orders can be rejected');
-    }
+    if (order.status !== OrderStatus.PENDING) throw new BadRequestException('Only pending orders can be rejected');
 
     order.status = OrderStatus.REJECTED;
-    order.approvedAt = new Date();;
+    order.approvedAt = new Date();
 
     return orderRepo.save(order);
     });
