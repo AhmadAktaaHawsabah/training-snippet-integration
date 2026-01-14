@@ -5,7 +5,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [forwardRef(() => UsersModule), forwardRef(() => AuthModule)],
+  imports: [forwardRef(() => UsersModule) , forwardRef(() => AuthModule)],
   controllers: [AdminController],
   providers: [AdminService],
   exports: [AdminService],

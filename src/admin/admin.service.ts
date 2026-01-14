@@ -12,7 +12,7 @@ export class AdminService {
       const admin = await this.usersService.create({
         ...createAdminDto,
       });
-
+      
       await this.usersService.updateRole(admin.id, UserRole.ADMIN);
 
       const { password, ...result } = admin;

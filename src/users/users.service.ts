@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   NotFoundException,
+  BadGatewayException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,13 +11,17 @@ import { User } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRole } from '../auth/enums/user-role.enum';
+import { Wallet } from 'src/wallet/wallet.entity';
+import { BaseExceptionFilter } from '@nestjs/core';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) {}
+    @InjectRepository(Wallet) private repo: Repository<Wallet>,
+
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.usersRepository.findOne({
@@ -34,7 +39,15 @@ export class UsersService {
       password: hashedPassword,
     });
 
-    return this.usersRepository.save(user);
+    const savedUser = await this.usersRepository.save(user);
+
+    const wallet = this.repo.create({
+      userId: savedUser.id,
+      balance: 0,
+    });
+
+    await this.repo.save(wallet);
+    return savedUser;
   }
 
   async findAll(): Promise<User[]> {

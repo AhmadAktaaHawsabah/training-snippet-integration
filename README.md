@@ -39,6 +39,7 @@ Implement a wallet and order management system that allows users to purchase ite
   - `approvedAt` (timestamp, nullable)
 
 - **Status Rules**:
+
   - Order is created with status `pending` ONLY IF user has sufficient wallet balance
   - If user lacks balance, order creation fails with 400 error
   - Admin must approve order to complete purchase

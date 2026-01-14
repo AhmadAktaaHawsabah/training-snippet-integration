@@ -10,23 +10,23 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   private generateTokens(user: User) {
     const payload = { email: user.email, sub: user.id, role: user.role };
-    
+
     // Sign access token with access secret
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET || 'your-secret-key',
       expiresIn: '15m',
     });
-    
+
     // Sign refresh token with refresh secret
     const refreshToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key',
       expiresIn: '7d',
     });
-    
+
     return { accessToken, refreshToken };
   }
 
@@ -52,7 +52,7 @@ export class AuthService {
       if (!user) {
         return null;
       }
-      
+
       const isPasswordValid = await this.usersService.validatePassword(
         password,
         user.password,
