@@ -13,6 +13,7 @@ import { WalletModule } from './wallet/wallet.module';
 import { OrderModule } from './order/order.module';
 import { Wallet } from './wallet/wallet.entity';
 import { Order } from './order/order.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { Order } from './order/order.entity';
       username: process.env.DB_USERNAME || 'root',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'CreditManagement',
-      entities: [User, Product , Wallet ,Order ],
+      entities: [User, Product, Wallet, Order],
       synchronize: false,
     }),
     UsersModule,
@@ -36,8 +37,9 @@ import { Order } from './order/order.entity';
     ProductsModule,
     WalletModule,
     OrderModule,
+    ScheduleModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

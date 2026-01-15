@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { OrderStatus } from './eums/order-status.enum';
 import { ProductsService } from '../products/products.service';
@@ -82,8 +82,6 @@ export class OrderService {
         await this.walletService.updateBalance(order.userId, wallet.balance);
 
         order.status = OrderStatus.APPROVED;
-        order.approvedAt = new Date();
-
         return await this.orderRepository.save(order);
     }
 
@@ -97,5 +95,23 @@ export class OrderService {
         order.status = OrderStatus.REJECTED;
 
         return await this.orderRepository.save(order);
+    }
+
+
+    async autoApproveExpiredOrders(): Promise<number> {
+        const expiredDate = new Date();
+        expiredDate.setHours(expiredDate.getHours() - 24);
+
+        const result = await this.orderRepository.update(
+            {
+                status: OrderStatus.PENDING,
+                createdAt: LessThanOrEqual(expiredDate),
+            },
+            {
+                status: OrderStatus.APPROVED,
+            },
+        );
+
+        return result.affected ?? 0;
     }
 }

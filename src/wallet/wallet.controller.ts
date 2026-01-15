@@ -8,7 +8,7 @@ import { UserRole } from 'src/auth/enums/user-role.enum';
 @Controller('wallet')
 export class WalletController {
     constructor(private service: WalletService) { }
-
+    
     @Post(':userId/add-credits')
     @UseGuards(RolesGuard)
     @Roles(UserRole.ADMIN)

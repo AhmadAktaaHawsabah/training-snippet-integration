@@ -10,10 +10,6 @@ export class WalletService {
     constructor(@InjectRepository(Wallet) private repo: Repository<Wallet>,
         private userService: UsersService) { }
 
-    creteWallet(id: number) {
-
-    }
-
     async addCredits(userId: number, addCreditDto): Promise<Wallet> {
         const [user, wallet] = await Promise.all([
             this.userService.findOne(userId),

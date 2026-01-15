@@ -6,12 +6,15 @@ import { Order } from './order.entity';
 import { WalletModule } from 'src/wallet/wallet.module';
 import { ProductsModule } from 'src/products/products.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { orderSubscriber } from './subscriber/orderSubscriber';
+import { OrderAutoApproveCron } from './cron/order-auto-approve.cron';
+
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order]),
     AuthModule, WalletModule, ProductsModule],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService, orderSubscriber, OrderAutoApproveCron],
   exports: [OrderService]
 })
 export class OrderModule { }
