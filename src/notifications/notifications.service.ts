@@ -6,20 +6,18 @@ import { notificationStatus } from '../order/eums/notification-status';
 import { notificationPreference } from 'src/users-settings/enum/notification_preference';
 import { SendSmsNotificationDto } from './dto/smsDto';
 import { SendEmailNotificationDto } from './dto/emailDto';
-import { TemplateService } from 'src/Template/template.service';
 import { HttpWrapperService } from 'src/http/http.service';
 import { EmailResponse, EmailError } from './entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorType } from './enum/error-type';
+import { renderTemplate } from 'src/utils/template';
 
 @Injectable()
 export class NotificationService {
   constructor(
     private readonly http: HttpWrapperService,
     private userSettingService: UserSettingService,
-    private templateService: TemplateService,
-    private httpService: HttpWrapperService,
     @InjectRepository(EmailError)
     private emailErrorRepo: Repository<EmailError>,
     @InjectRepository(EmailResponse)
@@ -54,7 +52,6 @@ export class NotificationService {
 
       return notificationStatus.SENT;
     } catch (error) {
-      // get statusCode and message
       const statusCode = error?.response?.status ?? 500;
       const message = error?.response?.data?.message || error.message;
       await this.storeEmailResponse({
@@ -127,7 +124,7 @@ export class NotificationService {
           preference === notificationPreference.ALL) &&
         user.email
       ) {
-        const htmlContent = this.templateService.render('email-templates', {
+        const htmlContent = renderTemplate('email-templates', {
           userName: user.firstName,
           orderId: order.id,
         });

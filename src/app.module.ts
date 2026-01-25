@@ -17,8 +17,8 @@ import { UsersSettingsController } from './users-settings/users-settings.control
 import { UsersSettingsModule } from './users-settings/users-settings.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { RequestModule } from './http/http.module';
-import { TemplateModule } from './Template/template.module';
-import { EmailResponse , EmailError } from './notifications/entity';
+import { EmailResponse, EmailError } from './notifications/entity';
+import { Service, Category, Pricing, Types } from './services/entity';
 
 @Module({
   imports: [
@@ -33,8 +33,21 @@ import { EmailResponse , EmailError } from './notifications/entity';
       username: process.env.DB_USERNAME || 'root',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'CreditManagement',
-      entities: [User, Product, Wallet, Order, UsersSettings , EmailResponse , EmailError],
+      entities: [
+        User,
+        Product,
+        Wallet,
+        Order,
+        UsersSettings,
+        EmailResponse,
+        EmailError,
+        Service,
+        Category,
+        Pricing,
+        Types,
+      ],
       synchronize: false,
+      migrationsRun: true,
     }),
     UsersModule,
     AuthModule,
@@ -44,12 +57,11 @@ import { EmailResponse , EmailError } from './notifications/entity';
     OrderModule,
     UsersSettingsModule,
     RequestModule,
-    TemplateModule,
     NotificationsModule,
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [],
-  exports:[]
+  exports: [],
 })
-export class AppModule { }
+export class AppModule {}
