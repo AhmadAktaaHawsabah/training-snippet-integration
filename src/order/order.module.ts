@@ -8,13 +8,20 @@ import { ProductsModule } from 'src/products/products.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { orderSubscriber } from './subscriber/orderSubscriber';
 import { OrderAutoApproveCron } from './cron/order-auto-approve.cron';
+import { NotificationService } from 'src/notifications/notifications.service';
+import { UsersSettingsModule } from 'src/users-settings/users-settings.module';
+import { UsersModule } from 'src/users/users.module';
+import { RequestModule } from 'src/http/http.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order]),
-    AuthModule, WalletModule, ProductsModule],
+    AuthModule, WalletModule, ProductsModule , RequestModule , UsersSettingsModule , UsersModule , NotificationsModule],
   controllers: [OrderController],
-  providers: [OrderService, orderSubscriber, OrderAutoApproveCron],
+  providers: [OrderService, orderSubscriber, OrderAutoApproveCron   ],
   exports: [OrderService]
 })
-export class OrderModule { }
+
+export class OrderModule { } 
+

@@ -1,4 +1,4 @@
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { Injectable, Logger } from '@nestjs/common';
 import { OrderService } from '../order.service';
 
@@ -8,9 +8,10 @@ export class OrderAutoApproveCron {
 
     constructor(private readonly ordersService: OrderService) { }
 
-    @Cron('0 * * * *') 
+    @Cron(CronExpression.EVERY_2ND_HOUR)
     async handle() {
         const count = await this.ordersService.autoApproveExpiredOrders();
         this.logger.log(`Auto-approved ${count} orders`);
     }
 }
+

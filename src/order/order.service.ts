@@ -5,6 +5,12 @@ import { Order } from './order.entity';
 import { OrderStatus } from './eums/order-status.enum';
 import { ProductsService } from '../products/products.service';
 import { WalletService } from '../wallet/wallet.service';
+import { notificationStatus } from './eums/notification-status';
+import { NotificationService } from 'src/notifications/notifications.service';
+import { User } from 'src/users/users.entity';
+import { UsersService } from 'src/users/users.service';
+
+
 
 @Injectable()
 export class OrderService {
@@ -13,6 +19,8 @@ export class OrderService {
         private orderRepository: Repository<Order>,
         private productsService: ProductsService,
         private walletService: WalletService,
+        private notificationService: NotificationService,
+        private userService: UsersService
     ) { }
 
     async createOrder(userId: number, productId: number): Promise<Order> {
@@ -21,8 +29,9 @@ export class OrderService {
             this.walletService.findOne(userId),
         ]);
 
-        if (wallet.balance < product.price) {
-            throw new BadRequestException('Insufficient wallet balance');
+
+        if (Number(wallet.balance) < Number(product.price)) {
+            throw new BadRequestException(`Insufficient wallet balance  ${product.price} your balance : ${wallet.balance}`);
         }
 
         const order = this.orderRepository.create({
@@ -35,7 +44,8 @@ export class OrderService {
         return await this.orderRepository.save(order);
     }
 
-    async findAllPending(page: number = 1, limit: number = 10): Promise<{ orders: Order[]; total: number; page: number; totalPages: number }> {
+    async findAllPending(page: number = 1, limit: number = 10): 
+    Promise<{ orders: Order[]; total: number; page: number; totalPages: number }> {
         const [orders, total] = await this.orderRepository.findAndCount({
             where: { status: OrderStatus.PENDING },
             relations: ['user', 'product'],
@@ -61,7 +71,6 @@ export class OrderService {
         if (!order) {
             throw new NotFoundException(`Order with ID ${orderId} not found`);
         }
-
         return order;
     }
 
@@ -75,13 +84,18 @@ export class OrderService {
         const wallet = await this.walletService.findOne(order.userId);
 
         if (wallet.balance < order.amount) {
-            throw new BadRequestException('Insufficient wallet balance');
+            throw new BadRequestException(`Insufficient wallet balance ${wallet.balance}`);
         }
 
         wallet.balance = wallet.balance - order.amount;
         await this.walletService.updateBalance(order.userId, wallet.balance);
 
         order.status = OrderStatus.APPROVED;
+        const user = await this.userService.findOne(order.userId)
+        const send = await this.notificationService.sendNotification(order, user)
+        if (!send) {
+            throw new Error('there is  an error  here !')
+        }
         return await this.orderRepository.save(order);
     }
 
@@ -96,7 +110,7 @@ export class OrderService {
 
         return await this.orderRepository.save(order);
     }
-
+    
 
     async autoApproveExpiredOrders(): Promise<number> {
         const expiredDate = new Date();
@@ -109,9 +123,33 @@ export class OrderService {
             },
             {
                 status: OrderStatus.APPROVED,
+                approvedAt: new Date()
             },
         );
-
         return result.affected ?? 0;
     }
+
+
+    async retrySendingNotifications(): Promise<boolean> {
+        const order = await this.orderRepository.findOne({
+            where: {
+                notificationStatus: notificationStatus.NOT_SENT,
+            },
+            relations: ['user'],
+            order: {
+                createdAt: 'ASC',
+            },
+        });
+
+        if (!order)
+            throw new NotFoundException('the order  not  found');
+
+        const status = await this.notificationService.sendNotification(order, order.user);
+
+        order.notificationStatus = status;
+        await this.orderRepository.save(order);
+
+        return true;
+    }
+
 }

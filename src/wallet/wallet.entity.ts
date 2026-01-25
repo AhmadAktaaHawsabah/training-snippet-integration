@@ -14,7 +14,6 @@ export class Wallet {
     @JoinColumn({ name: 'userId' })
     user: User;
 
-
     @Column({ type: 'decimal', default: 0 })
     balance: number;
 

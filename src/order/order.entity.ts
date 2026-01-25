@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne
 import { User } from 'src/users/users.entity';
 import { OrderStatus } from './eums/order-status.enum';
 import { Product } from 'src/products/products.entity';
+import { notificationStatus } from './eums/notification-status';
 
 @Entity()
 export class Order {
@@ -30,12 +31,15 @@ export class Order {
     @Column({ type: 'enum', enum: OrderStatus })
     status: OrderStatus;
 
+    @Column({ type: 'enum', enum: notificationStatus })
+    notificationStatus: notificationStatus;
+
 
     @CreateDateColumn()
     createdAt: Date;
 
     @Column({ nullable: true })
-    approvedAt: Date ;
+    approvedAt: Date;
 
 }
 

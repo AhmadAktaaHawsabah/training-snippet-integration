@@ -4,6 +4,8 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
+  phoneNumber?: string;
+
   @IsString()
   @MinLength(6)
   password: string;
@@ -14,3 +16,4 @@ export class CreateUserDto {
   @IsString()
   lastName: string;
 }
+

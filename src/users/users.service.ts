@@ -20,8 +20,7 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     @InjectRepository(Wallet) private repo: Repository<Wallet>,
-
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.usersRepository.findOne({

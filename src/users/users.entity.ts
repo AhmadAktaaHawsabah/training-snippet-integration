@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne } from 'typ
 import { UserRole } from '../auth/enums/user-role.enum';
 import { Order } from 'src/order/order.entity';
 import { Wallet } from 'src/wallet/wallet.entity';
-
+import { UsersSettings } from 'src/users-settings/user-setting.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
@@ -10,6 +10,9 @@ export class User {
 
   @Column({ unique: true })
   email: string;
+
+  @Column({ unique: true, nullable: true })
+  phoneNumber: string;
 
   @Column()
   password: string;
@@ -20,11 +23,7 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.USER,
-  })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
   @Column({ default: true })
@@ -41,4 +40,8 @@ export class User {
 
   @OneToOne(() => Wallet, (wallet) => wallet.user)
   wallet: Wallet;
+
+  @OneToOne(() => UsersSettings, (userSetting) => userSetting.user)
+  userSetting: UsersSettings;
 }
+

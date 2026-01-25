@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
@@ -14,6 +12,13 @@ import { OrderModule } from './order/order.module';
 import { Wallet } from './wallet/wallet.entity';
 import { Order } from './order/order.entity';
 import { ScheduleModule } from '@nestjs/schedule';
+import { UsersSettings } from './users-settings/user-setting.entity';
+import { UsersSettingsController } from './users-settings/users-settings.controller';
+import { UsersSettingsModule } from './users-settings/users-settings.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { RequestModule } from './http/http.module';
+import { TemplateModule } from './Template/template.module';
+import { EmailResponse , EmailError } from './notifications/entity';
 
 @Module({
   imports: [
@@ -28,7 +33,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       username: process.env.DB_USERNAME || 'root',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'CreditManagement',
-      entities: [User, Product, Wallet, Order],
+      entities: [User, Product, Wallet, Order, UsersSettings , EmailResponse , EmailError],
       synchronize: false,
     }),
     UsersModule,
@@ -37,9 +42,14 @@ import { ScheduleModule } from '@nestjs/schedule';
     ProductsModule,
     WalletModule,
     OrderModule,
+    UsersSettingsModule,
+    RequestModule,
+    TemplateModule,
+    NotificationsModule,
     ScheduleModule.forRoot()
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
+  exports:[]
 })
 export class AppModule { }
