@@ -1,5 +1,5 @@
 import { Entity, OneToMany, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Service } from './service.entity';
+import { Services } from './service.entity';
 
 @Entity()
 export class Types {
@@ -9,6 +9,6 @@ export class Types {
   @Column()
   name: string;
 
-  @OneToMany(() => Service, (service) => service.type)
-  services: Service[];
+  @OneToMany(() => Services, (service) => service.type)
+  services: Services[];
 }

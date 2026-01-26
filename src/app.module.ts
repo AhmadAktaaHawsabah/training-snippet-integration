@@ -16,9 +16,8 @@ import { UsersSettings } from './users-settings/user-setting.entity';
 import { UsersSettingsController } from './users-settings/users-settings.controller';
 import { UsersSettingsModule } from './users-settings/users-settings.module';
 import { NotificationsModule } from './notifications/notifications.module';
-import { RequestModule } from './http/http.module';
 import { EmailResponse, EmailError } from './notifications/entity';
-import { Service, Category, Pricing, Types } from './services/entity';
+import { Services, Category, Pricing, Types } from './services/entity';
 
 @Module({
   imports: [
@@ -41,7 +40,7 @@ import { Service, Category, Pricing, Types } from './services/entity';
         UsersSettings,
         EmailResponse,
         EmailError,
-        Service,
+        Services,
         Category,
         Pricing,
         Types,
@@ -56,7 +55,6 @@ import { Service, Category, Pricing, Types } from './services/entity';
     WalletModule,
     OrderModule,
     UsersSettingsModule,
-    RequestModule,
     NotificationsModule,
     ScheduleModule.forRoot(),
   ],

@@ -11,31 +11,28 @@ import { Category } from './category.entity';
 import { Types } from './type.entity';
 import { Pricing } from './pricing.entity';
 
-@Entity('services')
-export class Service {
+@Entity()
+export class Services {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  // 🔗 Category
-  @ManyToOne(() => Category, category => category.services)
-  @JoinColumn({ name: 'category_id' })
+  @ManyToOne(() => Category, (category) => category.services)
+  @JoinColumn({ name: 'categoryId' })
   category: Category;
 
   @Column()
   category_id: number;
 
-  // 🔗 Type
-  @ManyToOne(() => Types, type => type.services)
-  @JoinColumn({ name: 'type_id' })
+  @ManyToOne(() => Types, (type) => type.services)
+  @JoinColumn({ name: 'typeId' })
   type: Types;
 
   @Column()
-  type_id: number;
+  typeId: number;
 
-  @OneToMany(() => Pricing, pricing => pricing.service)
+  @OneToMany(() => Pricing, (pricing) => pricing.service)
   pricing: Pricing[];
-    static pricing: any;
 }

@@ -11,13 +11,12 @@ import { OrderAutoApproveCron } from './cron/order-auto-approve.cron';
 import { NotificationService } from 'src/notifications/notifications.service';
 import { UsersSettingsModule } from 'src/users-settings/users-settings.module';
 import { UsersModule } from 'src/users/users.module';
-import { RequestModule } from 'src/http/http.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order]),
-    AuthModule, WalletModule, ProductsModule , RequestModule , UsersSettingsModule , UsersModule , NotificationsModule],
+    AuthModule, WalletModule, ProductsModule  , UsersSettingsModule , UsersModule , NotificationsModule],
   controllers: [OrderController],
   providers: [OrderService, orderSubscriber, OrderAutoApproveCron   ],
   exports: [OrderService]

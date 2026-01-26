@@ -4,6 +4,8 @@ import { User } from 'src/users/users.entity';
 @Entity()
 export class Wallet {
 
+    // don`t repeat id definition make a super class and extend it wherever needed
+
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -11,7 +13,7 @@ export class Wallet {
     userId: number;
 
     @OneToOne(() => User)
-    @JoinColumn({ name: 'userId' })
+    @JoinColumn({ name: 'userId'})
     user: User;
 
     @Column({ type: 'decimal', default: 0 })

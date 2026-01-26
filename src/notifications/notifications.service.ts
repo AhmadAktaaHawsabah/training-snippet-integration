@@ -6,32 +6,36 @@ import { notificationStatus } from '../order/eums/notification-status';
 import { notificationPreference } from 'src/users-settings/enum/notification_preference';
 import { SendSmsNotificationDto } from './dto/smsDto';
 import { SendEmailNotificationDto } from './dto/emailDto';
-import { HttpWrapperService } from 'src/http/http.service';
+import { HttpWrapperService } from 'src/utils/http.util';
 import { EmailResponse, EmailError } from './entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorType } from './enum/error-type';
 import { renderTemplate } from 'src/utils/template';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class NotificationService {
   constructor(
-    private readonly http: HttpWrapperService,
     private userSettingService: UserSettingService,
     @InjectRepository(EmailError)
     private emailErrorRepo: Repository<EmailError>,
+        private readonly config: ConfigService,
     @InjectRepository(EmailResponse)
     private emailResponseRepo: Repository<EmailResponse>,
   ) {}
 
   async sendEmail(dto: SendEmailNotificationDto): Promise<notificationStatus> {
     try {
-      const https = await this.http.request(
+
+      const baseUrl = this.config.get<string>('NOTIFICATION_URL');
+      const https: any = await HttpWrapperService(
         'post',
         'NOTIFICATION_URL',
         'notifications/email',
-        dto,
+        { data: dto },
       );
+
       const data = https.data ?? {
         success: true,
         statusCode: 200,
@@ -96,11 +100,11 @@ export class NotificationService {
 
   async sendSms(dto: SendSmsNotificationDto): Promise<notificationStatus> {
     try {
-      await this.http.request(
+      await HttpWrapperService(
         'post',
         'NOTIFICATION_URL',
         'notifications/sms',
-        dto,
+        { data: dto },
       );
       return notificationStatus.SENT;
     } catch {
